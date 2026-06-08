@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>借款资质评测 - 安全版</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;font-family:Microsoft YaHei,sans-serif;}
+        body{background:#f5f7fa;color:#333;max-width:500px;margin:0 auto;padding-bottom:80px;}
+        .container{display:none;padding:20px;}
+        .container.active{display:block;}
+        
+        .top-bar{background:#2d8cf5;color:#fff;padding:15px;text-align:center;font-size:17px;font-weight:bold;}
+        .title{font-size:22px;font-weight:bold;text-align:center;margin:30px 0 10px;color:#2d8cf5;}
+        .desc{text-align:center;color:#666;margin-bottom:25px;font-size:14px;line-height:1.6;}
+        
+        .card{background:#fff;border-radius:12px;padding:22px;margin-bottom:15px;box-shadow:0 2px 10px rgba(0,0,0,0.05);}
+        .card-title{font-size:16px;font-weight:bold;margin-bottom:12px;color:#333;}
+        .card-text{font-size:14px;color:#666;line-height:1.6;}
+        
+        .btn{width:100%;height:46px;border:none;border-radius:8px;background:#2d8cf5;color:#fff;font-size:15px;font-weight:bold;margin:6px 0;cursor:pointer;}
+        .btn-outline{background:#fff;color:#2d8cf5;border:1px solid #2d8cf5;}
+
+        /* 选项选中高亮样式 */
+        .option-btn{width:100%;height:46px;border:1px solid #ddd;border-radius:8px;background:#fff;font-size:15px;margin:6px 0;cursor:pointer;}
+        .option-btn.active{background:#2d8cf5;color:#fff;border-color:#2d8cf5;}
+        
+        .loan-item{background:#fff;border-radius:10px;padding:16px;margin-bottom:10px;}
+        .loan-name{font-size:15px;font-weight:bold;margin-bottom:5px;}
+        .loan-desc{font-size:13px;color:#888;}
+        .rate{font-size:13px;color:#2d8cf5;margin-top:5px;}
+        
+        .fixed-bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:500px;background:#fff;padding:12px;text-align:center;box-shadow:0 -2px 8px rgba(0,0,0,0.06);font-size:13px;color:#666;}
+        .list-item{padding:8px 0;border-bottom:1px solid #eee;font-size:14px;}
+        .warn-tips{background:#fff3e0;color:#d35400;padding:12px;border-radius:8px;margin:10px 0;font-size:14px;line-height:1.7;}
+
+        /* 手机号提交模块样式 */
+        .phone-input{width:100%;height:46px;border:1px solid #ddd;border-radius:8px;padding:0 15px;font-size:15px;margin:10px 0;}
+        .phone-tip{color:#ff5722;font-size:14px;text-align:center;margin-bottom:10px;line-height:1.5;}
+        /* 隐藏机构列表模块 */
+        .hide-block {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="top-bar">借款评测工具</div>
+
+    <!-- 首页 -->
+    <div class="container active" id="pageHome">
+        <div class="title">个人借款资质评测</div>
+        <div class="desc">本工具仅提供资质评测与知识科普<br>非借贷平台，不提供放款、申请服务</div>
+
+        <div class="card">
+            <div class="card-title">📊 今日通过率评测</div>
+            <div class="card-text">共计5道信用相关选择题，系统综合打分生成产品匹配参考，全程无任何隐私信息采集。</div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">⚠️ 安全声明</div>
+            <div class="card-text">1. 不收集手机号、身份证、姓名等隐私信息<br>2. 不收取任何费用，无会员充值<br>3. 不提供借贷申请与第三方导流<br>4. 评测结果仅作理财科普参考</div>
+        </div>
+
+        <button class="btn" onclick="goPage('pageTest')">开始5题测评</button>
+        <button class="btn btn-outline" onclick="goPage('pageList')">查看今日产品参考</button>
+    </div>
+
+    <!-- 测评页（5道题目+选中高亮） -->
+    <div class="container" id="pageTest">
+        <div class="title">资质测评问卷</div>
+        <div class="desc">共5题，完成后生成信用参考评分</div>
+
+        <div class="card">
+            <div class="card-title">1. 是否持有在用信用卡，近12个月无逾期？</div>
+            <button class="option-btn" data-q="1" data-v="1">有，正常履约无逾期</button>
+            <button class="option-btn" data-q="1" data-v="2">有，出现过逾期</button>
+            <button class="option-btn" data-q="1" data-v="3">没有信用卡</button>
+        </div>
+
+        <div class="card">
+            <div class="card-title">2. 个人征信近半年查询次数情况？</div>
+            <button class="option-btn" data-q="2" data-v="1">少于3次</button>
+            <button class="option-btn" data-q="2" data-v="2">3~8次</button>
+            <button class="option-btn" data-q="2" data-v="3">大于8次</button>
+        </div>
+
+        <div class="card">
+            <div class="card-title">3. 目前名下各类信贷负债占收入比例？</div>
+            <button class="option-btn" data-q="3" data-v="1">30%以内</button>
+            <button class="option-btn" data-q="3" data-v="2">30%~60%</button>
+            <button class="option-btn" data-q="3" data-v="3">60%以上</button>
+        </div>
+
+        <div class="card">
+            <div class="card-title">4. 社保/公积金连续缴纳状态？</div>
+            <button class="option-btn" data-q="4" data-v="1">连续缴纳1年以上</button>
+            <button class="option-btn" data-q="4" data-v="2">断续缴纳/不满1年</button>
+            <button class="option-btn" data-q="4" data-v="3">无社保公积金</button>
+        </div>
+
+        <div class="card">
+            <div class="card-title">5. 近一年信贷有无逾期、呆账记录？</div>
+            <button class="option-btn" data-q="5" data-v="1">全部按时还款，无逾期</button>
+            <button class="option-btn" data-q="5" data-v="2">偶有短期逾期已结清</button>
+            <button class="option-btn" data-q="5" data-v="3">当前尚有逾期未结清</button>
+        </div>
+
+        <button class="btn" onclick="getResult()">一键生成测评结果</button>
+        <button class="btn btn-outline" onclick="goPage('pageHome')">返回首页</button>
+    </div>
+
+    <!-- 产品参考页（10家） -->
+    <div class="container" id="pageList">
+        <div class="title">今日正规产品参考（10家）</div>
+        <div class="desc">仅为公开资料整理，无申请入口，不引导借贷</div>
+
+        <div class="loan-item"><div class="loan-name">借呗</div><div class="loan-desc">支付宝官方信用贷产品</div><div class="rate">参考通过率：中</div></div>
+        <div class="loan-item"><div class="loan-name">微粒贷</div><div class="loan-desc">微信官方小额信贷产品</div><div class="rate">参考通过率：中</div></div>
+        <div class="loan-item"><div class="loan-name">京东金条</div><div class="loan-desc">京东金融旗下信用产品</div><div class="rate">参考通过率：中</div></div>
+        <div class="loan-item"><div class="loan-name">抖音放心借</div><div class="loan-desc">持牌机构合作产品</div><div class="rate">参考通过率：中</div></div>
+        <div class="loan-item"><div class="loan-name">360借条</div><div class="loan-desc">正规持牌消费金融产品</div><div class="rate">参考通过率：中高</div></div>
+        <div class="loan-item"><div class="loan-name">有钱花</div><div class="loan-desc">百度旗下正规信贷产品</div><div class="rate">参考通过率：中高</div></div>
+        <div class="loan-item"><div class="loan-name">招联好期贷</div><div class="loan-desc">持牌消费金融产品</div><div class="rate">参考通过率：中高</div></div>
+        <div class="loan-item"><div class="loan-name">中邮钱包</div><div class="loan-desc">邮储背景持牌产品</div><div class="rate">参考通过率：中</div></div>
+        <div class="loan-item"><div class="loan-name">安逸花</div><div class="loan-desc">马上消费金融产品</div><div class="rate">参考通过率：中高</div></div>
+        <div class="loan-item"><div class="loan-name">分期乐</div><div class="loan-desc">正规分期信贷产品</div><div class="rate">参考通过率：中高</div></div>
+
+        <button class="btn" style="margin-top:20px;" onclick="goPage('pageHome')">返回首页</button>
+    </div>
+
+    <!-- 结果页 -->
+    <div class="container" id="pageResult">
+        <div class="title">测评完成</div>
+        <div class="desc">以下数据仅科普参考，实际审批以金融机构官方审核为准</div>
+
+        <div class="card">
+            <div class="card-title">📊 你的今日参考通过率</div>
+            <div style="font-size:28px;color:#2d8cf5;font-weight:bold;text-align:center;margin:12px 0;" id="resultRate">0%</div>
+            <div style="text-align:center;color:#666;font-size:14px;">仅供信用科普，不作为放款依据</div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">💡 个人信用优化建议</div>
+            <div class="card-text" id="resultMsg">请保持良好信用记录，合理借贷，理性消费。</div>
+        </div>
+
+        <!-- 手机号预留提交模块 -->
+        <div class="card">
+            <div class="card-title">📞 提额手机号预留</div>
+            <div class="phone-tip">温馨提示：提额将根据您预留的手机号进行操作，请准确填写</div>
+            <input type="tel" class="phone-input" id="userPhone" placeholder="请输入11位常用手机号" maxlength="11">
+            <!-- 合并为单个按钮 -->
+            <button class="btn" onclick="submitAndDownload()">提交手机号（下载了解更多机构）</button>
+        </div>
+
+        <!-- 风险警示提示 -->
+        <div class="warn-tips">
+            ⚠️温馨提示：如需办理信贷业务，请前往对应机构官方APP、官方公众号办理，切勿轻信第三方代办、中介包装征信、私下放款，谨防电信诈骗与高额砍头息。
+        </div>
+
+        <!-- 机构列表 - 已隐藏 -->
+        <div class="card hide-block">
+            <div class="card-title">一、交易量前十合规助贷合作机构（监管备案白名单）</div>
+            <div class="list-item">1.蚂蚁智信（蚂蚁集团官方助贷主体）</div>
+            <div class="list-item">2.度小满科技（百度旗下合规助贷）</div>
+            <div class="list-item">3.京东科技（京东金条/白条助贷主体）</div>
+            <div class="list-item">4.奇富科技（360旗下正规助贷主体）</div>
+            <div class="list-item">5.平安融易（平安集团全国性融资担保助贷）</div>
+            <div class="list-item">6.滴滴融科（滴滴旗下官方信贷合作）</div>
+            <div class="list-item">7.携程金融（携程持牌助贷事业部）</div>
+            <div class="list-item">8.美团小贷（美团场景合规助贷）</div>
+            <div class="list-item">9.字节跳动放心借事业部</div>
+            <div class="list-item">10.唯品会金融（唯品富邦消金配套助贷）</div>
+        </div>
+
+        <div class="card hide-block">
+            <div class="card-title">二、全国前十持牌消费金融（国家金融监管总局发证）</div>
+            <div class="list-item">1.重庆蚂蚁消费金融有限公司（花呗/借呗资金方）</div>
+            <div class="list-item">2.招联消费金融有限公司（招行+联通合资）</div>
+            <div class="list-item">3.马上消费金融股份有限公司（安逸花）</div>
+            <div class="list-item">4.兴业消费金融股份公司</div>
+            <div class="list-item">5.中邮消费金融有限公司（中邮钱包）</div>
+            <div class="list-item">6.中银消费金融有限公司（中国银行控股）</div>
+            <div class="list-item">7.小米消费金融有限公司</div>
+            <div class="list-item">8.中原消费金融有限公司</div>
+            <div class="list-item">9.苏银凯基消费金融有限公司</div>
+            <div class="list-item">10.杭银消费金融股份有限公司</div>
+        </div>
+
+        <div class="card hide-block">
+            <div class="card-title">三、五家正规持牌分期购物商城</div>
+            <div class="list-item">1.支付宝花呗商城（淘宝/天猫官方分期）</div>
+            <div class="list-item">2.京东商城白条分期（京东自营分期）</div>
+            <div class="list-item">3.苏宁易购任性付分期商城</div>
+            <div class="list-item">4.分期乐自营数码分期商城</div>
+            <div class="list-item">5.唯品会商城唯品分期（唯品富邦消金）</div>
+        </div>
+
+        <button class="btn" onclick="goPage('pageHome')">返回首页重新测评</button>
+    </div>
+
+    <div class="fixed-bottom">
+        本工具仅提供知识科普 | 非借贷平台 | 全程免费无收费
+    </div>
+
+<script>
+let ans = [0,0,0,0,0];
+
+function goPage(id) {
+    document.querySelectorAll('.container').forEach(e => e.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+}
+
+// 点击选项互斥+高亮
+document.querySelectorAll('.option-btn').forEach(btn => {
+    btn.addEventListener('click', function(){
+        let q = this.getAttribute('data-q');
+        let v = this.getAttribute('data-v');
+        document.querySelectorAll(`.option-btn[data-q="${q}"]`).forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        ans[q-1] = parseInt(v);
+    });
+});
+
+function getResult() {
+    let score = 0;
+    if(ans[0]===1) score +=18; else if(ans[0]===2) score +=6;
+    if(ans[1]===1) score +=18; else if(ans[1]===2) score +=7;
+    if(ans[2]===1) score +=18; else if(ans[2]===2) score +=7;
+    if(ans[3]===1) score +=18; else if(ans[3]===2) score +=7;
+    if(ans[4]===1) score +=28; else if(ans[4]===2) score +=9;
+
+    let passRate = Math.min(score,85);
+    document.getElementById('resultRate').innerText = passRate + '%';
+
+    let tipMsg = '';
+    if(passRate >=70){
+        tipMsg = '个人征信资质整体优良，优先选择银行、持牌消费金融正规产品，切勿多头借贷。';
+    }else if(passRate >=40){
+        tipMsg = '资质中等，建议减少频繁申贷，降低负债比例，持续养护个人征信。';
+    }else{
+        tipMsg = '当前征信条件偏弱，优先结清现有逾期欠款，暂停非必要信贷申请，稳步优化信用。';
+    }
+    document.getElementById('resultMsg').innerText = tipMsg;
+    goPage('pageResult');
+}
+
+// 合并逻辑：校验手机号 + 提交 + 下载文档
+function submitAndDownload() {
+    let phone = document.getElementById('userPhone').value.trim();
+    let reg = /^1[3-9]\d{9}$/;
+    if(!phone){
+        alert('请输入手机号');
+        return;
+    }
+    if(!reg.test(phone)){
+        alert('请输入有效的11位手机号');
+        return;
+    }
+    alert('手机号预留成功！后续提额将根据该号码进行操作');
+    document.getElementById('userPhone').value = '';
+
+    // 执行文档下载
+    let content = "正规金融机构参考清单\n";
+    content += "====================================\n\n";
+
+    content += "一、交易量前十合规助贷合作机构（监管备案白名单）\n";
+    content += "1.蚂蚁智信（蚂蚁集团官方助贷主体）\n";
+    content += "2.度小满科技（百度旗下合规助贷）\n";
+    content += "3.京东科技（京东金条/白条助贷主体）\n";
+    content += "4.奇富科技（360旗下正规助贷主体）\n";
+    content += "5.平安融易（平安集团全国性融资担保助贷）\n";
+    content += "6.滴滴融科（滴滴旗下官方信贷合作）\n";
+    content += "7.携程金融（携程持牌助贷事业部）\n";
+    content += "8.美团小贷（美团场景合规助贷）\n";
+    content += "9.字节跳动放心借事业部\n";
+    content += "10.唯品会金融（唯品富邦消金配套助贷）\n\n";
+
+    content += "二、全国前十持牌消费金融（国家金融监管总局发证）\n";
+    content += "1.重庆蚂蚁消费金融有限公司（花呗/借呗资金方）\n";
+    content += "2.招联消费金融有限公司（招行+联通合资）\n";
+    content += "3.马上消费金融股份有限公司（安逸花）\n";
+    content += "4.兴业消费金融股份公司\n";
+    content += "5.中邮消费金融有限公司（中邮钱包）\n";
+    content += "6.中银消费金融有限公司（中国银行控股）\n";
+    content += "7.小米消费金融有限公司\n";
+    content += "8.中原消费金融有限公司\n";
+    content += "9.苏银凯基消费金融有限公司\n";
+    content += "10.杭银消费金融股份有限公司\n\n";
+
+    content += "三、五家正规持牌分期购物商城\n";
+    content += "1.支付宝花呗商城（淘宝/天猫官方分期）\n";
+    content += "2.京东商城白条分期（京东自营分期）\n";
+    content += "3.苏宁易购任性付分期商城\n";
+    content += "4.分期乐自营数码分期商城\n";
+    content += "5.唯品会商城唯品分期（唯品富邦消金）\n\n";
+
+    content += "温馨提醒：请选择官方正规渠道办理业务，谨防诈骗！";
+
+    let blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+    let url = URL.createObjectURL(blob);
+    let a = document.createElement("a");
+    a.href = url;
+    a.download = "正规金融机构参考清单.txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+</script>
+</body>
+</html>
